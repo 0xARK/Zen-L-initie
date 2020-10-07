@@ -1,0 +1,63 @@
+<project name="Zen l'initié" default="jar" basedir=".">
+
+    <description>Zen l'initié</description>
+
+    <!-- variable creation -->
+
+    <property name="src" value="src"/>
+    <property name="jar" value="jar"/>
+    <property name="class" value="class"/>
+    <property name="data" value="data"/>
+    <property name="javadoc" value="javadoc"/>
+    <property name="saved" value="saved"/>
+    <property name="launcher" value="LaunchZen"/>
+
+    <!-- directory cleaner -->
+
+    <target name="clean">
+        <echo message="[+] Start cleaning of all directories"></echo>
+	<delete dir="${class}"/>
+        <delete dir="${jar}"/>
+        <delete dir="${javadoc}"/>
+        <echo message="[+] All directories was successfully cleaned"></echo>
+    </target>
+
+    <target name="init">
+        <echo message="[+] Initialisation"></echo>
+        <tstamp/>
+        <mkdir dir="${class}"/>
+    </target>
+
+    <!-- compilation -->
+
+    <target name="compile" depends="init">
+        <echo message="[+] Compilation of the source code"></echo>
+        <javac srcdir="${src}" destdir="${class}"/>
+        <echo message="[+] Compilation ended successfully"></echo>
+    </target>
+
+    <!-- javadoc generation -->
+
+    <target name="javadoc" depends="compile">
+        <echo message="[+] Creation of the JavaDoc"></echo>
+        <mkdir dir="${javadoc}"/>
+        <javadoc sourcepath="${src}" destdir="${javadoc}"/>
+        <echo message="[+] JavaDoc was successfully created"></echo>
+    </target>
+
+    <!-- JAR generation -->
+
+    <target name="jar" depends="javadoc">
+        <echo message="[+] Creation of the JAR file"></echo>
+        <mkdir dir="${jar}"/>
+	<mkdir dir="${jar}/${saved}"/>
+        <jar destfile="${jar}/Zen.jar" basedir="${class}">
+            <manifest>
+                <attribute name="Main-Class" value="${launcher}"/>
+            </manifest>
+            <fileset dir="${data}"/>
+        </jar>
+        <echo message="[+] JAR file was successfully created"></echo>
+    </target>
+
+</project>
